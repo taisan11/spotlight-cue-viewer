@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#0a0b0d" />
+  <title>Spotlight Cue Viewer</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="dropOverlay" class="drop-overlay" aria-hidden="true">
+    <div class="drop-box">CSVをドロップして読み込み</div>
+  </div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"></div>
+      <div>
+        <h1>Spotlight Cue Viewer</h1>
+        <p id="sourceLabel">CSVを読み込み中…</p>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button id="viewToggle" class="btn" type="button" aria-pressed="false">ライブ表示</button>
+      <button id="fullscreenBtn" class="btn icon-btn" type="button" title="全画面表示" aria-label="全画面表示">⛶</button>
+      <label class="btn primary file-btn">
+        CSVを開く
+        <input id="fileInput" type="file" accept=".csv,text/csv,text/plain" />
+      </label>
+    </div>
+  </header>
+
+  <main>
+    <section id="statusBar" class="status-bar" hidden>
+      <span id="statusText"></span>
+      <button id="statusClose" type="button" aria-label="閉じる">×</button>
+    </section>
+
+    <section id="listView" class="list-view" aria-label="キュー一覧">
+      <div class="list-head">
+        <div>
+          <span class="eyebrow">CUE SHEET</span>
+          <h2>キュー一覧</h2>
+        </div>
+        <div class="list-tools">
+          <span id="cueCount" class="count-pill">0 cues</span>
+          <button id="resetBtn" class="text-btn" type="button">先頭に戻る</button>
+        </div>
+      </div>
+      <div id="cueList" class="cue-list"></div>
+    </section>
+
+    <section id="liveView" class="live-view" hidden aria-label="ライブ表示">
+      <div class="live-topline">
+        <div class="live-position"><span id="liveIndex">1</span><span class="slash">/</span><span id="liveTotal">1</span></div>
+        <div class="live-actions">
+          <span class="shortcut">Space / ↓ 次へ</span>
+          <span class="shortcut">↑ 前へ</span>
+          <button id="backToListBtn" class="text-btn" type="button">一覧へ</button>
+        </div>
+      </div>
+
+      <article id="currentCue" class="current-cue"></article>
+
+      <div class="next-wrap">
+        <span class="eyebrow">NEXT</span>
+        <article id="nextCue" class="next-cue"></article>
+      </div>
+
+      <div class="live-controls">
+        <button id="prevBtn" class="transport" type="button">← 前へ</button>
+        <button id="nextBtn" class="transport primary" type="button">次へ →</button>
+      </div>
+    </section>
+  </main>
+
+  <template id="emptyTemplate">
+    <div class="empty-state">
+      <strong>CSVを読み込んでください</strong>
+      <span>上の「CSVを開く」か、画面へのドラッグ&ドロップで読み込めます。</span>
+    </div>
+  </template>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>
