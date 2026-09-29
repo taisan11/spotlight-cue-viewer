@@ -7,8 +7,8 @@
   --text: #f3f5f7;
   --muted: #9ba3af;
   --dim: #6f7782;
-  --accent: #5ee7c4;
-  --accent-soft: rgba(94, 231, 196, .12);
+  --accent: #3fa88f;
+  --accent-soft: rgba(63, 168, 143, .12);
   --warn: #ffcb6b;
   --danger: #ff7a90;
   --radius: 16px;
@@ -21,9 +21,7 @@ html { background: var(--bg); }
 body {
   margin: 0;
   min-height: 100vh;
-  background:
-    radial-gradient(circle at 10% -10%, rgba(94, 231, 196, .08), transparent 28rem),
-    var(--bg);
+  background: var(--bg);
   color: var(--text);
 }
 button, input { font: inherit; }
@@ -48,7 +46,7 @@ button { color: inherit; }
   height: 34px;
   border-radius: 999px;
   background: var(--accent);
-  box-shadow: 0 0 24px rgba(94, 231, 196, .25);
+  box-shadow: 0 0 24px rgba(63, 168, 143, .22);
 }
 h1 { margin: 0; font-size: clamp(15px, 2vw, 18px); letter-spacing: .01em; }
 .brand p {
@@ -130,7 +128,7 @@ h2 { margin: 4px 0 0; font-size: 22px; }
 }
 .cue-row:hover { border-color: #404754; background: #14171d; }
 .cue-row:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.cue-row.is-current { border-color: rgba(94, 231, 196, .64); background: var(--accent-soft); }
+.cue-row.is-current { border-color: rgba(63, 168, 143, .64); background: var(--accent-soft); }
 .cue-row.is-current::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 3px; background: var(--accent); }
 .cue-main, .cue-lighting, .cue-spots { min-width: 0; padding: 15px 16px; }
 .cue-lighting, .cue-spots { border-left: 1px solid var(--line); }
@@ -146,9 +144,9 @@ h2 { margin: 4px 0 0; font-size: 22px; }
   display: inline-flex;
   align-items: center;
   padding: 2px 6px;
-  border: 1px solid rgba(94, 231, 196, .22);
+  border: 1px solid rgba(63, 168, 143, .22);
   border-radius: 999px;
-  background: rgba(94, 231, 196, .08);
+  background: rgba(63, 168, 143, .08);
   color: #8ef2d8;
   font-size: 10px;
   font-weight: 900;
@@ -172,9 +170,9 @@ h2 { margin: 4px 0 0; font-size: 22px; }
   display: grid;
   gap: 16px;
   padding: clamp(18px, 3.2vw, 36px);
-  border: 1px solid rgba(94, 231, 196, .28);
+  border: 1px solid rgba(63, 168, 143, .28);
   border-radius: 20px;
-  background: linear-gradient(145deg, rgba(94, 231, 196, .08), rgba(17, 19, 24, .96) 35%);
+  background: rgba(17, 19, 24, .96);
   box-shadow: var(--shadow);
 }
 .live-timing { margin: 0; font-size: clamp(27px, 5vw, 62px); line-height: 1.14; letter-spacing: -.02em; overflow-wrap: anywhere; }
@@ -205,7 +203,7 @@ h2 { margin: 4px 0 0; font-size: 22px; }
 .live-spot.is-own-spot {
   border-color: var(--accent);
   background: var(--accent-soft);
-  box-shadow: 0 0 0 1px rgba(94, 231, 196, .18), 0 0 24px rgba(94, 231, 196, .08);
+  box-shadow: 0 0 0 1px rgba(63, 168, 143, .18), 0 0 24px rgba(63, 168, 143, .08);
 }
 .own-spot-badge {
   display: inline-flex;
@@ -219,21 +217,24 @@ h2 { margin: 4px 0 0; font-size: 22px; }
 }
 .own-spot-hint { margin-bottom: 8px; }
 .live-spot .value { font-size: clamp(18px, 2.4vw, 29px); }
-.next-wrap { margin-top: 22px; }
-.next-cue {
-  display: grid;
-  grid-template-columns: minmax(180px, 1.25fr) minmax(160px, .9fr) minmax(260px, 1.8fr);
-  margin-top: 7px;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: 13px;
-  background: var(--panel);
-}
-.next-cue > div { min-width: 0; padding: 13px 14px; }
-.next-cue > div + div { border-left: 1px solid var(--line); }
-.next-cue .spot-grid { --spot-count: 3; }
+.live-view .semantic-red,
+.live-view .semantic-blue,
+.live-view .semantic-yellow,
+.live-view .semantic-green,
+.live-view .semantic-orange { filter: brightness(var(--cue-brightness, 1)); }
+.live-view .semantic-white { opacity: var(--cue-brightness, 1); }
 .live-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
 .transport { padding: 14px; font-size: 15px; font-weight: 900; }
+.brightness-control {
+  display: grid;
+  gap: 5px;
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.brightness-control label { display: flex; justify-content: space-between; gap: 10px; }
+.brightness-control output { color: var(--text); font-variant-numeric: tabular-nums; font-weight: 800; }
+.brightness-control input { width: 100%; margin: 0; accent-color: var(--accent); cursor: pointer; }
 
 .empty-state {
   display: grid;
@@ -275,8 +276,6 @@ h2 { margin: 4px 0 0; font-size: 22px; }
 @media (max-width: 900px) {
   .cue-row { grid-template-columns: 1fr 1fr; }
   .cue-spots { grid-column: 1 / -1; border-left: 0; border-top: 1px solid var(--line); }
-  .next-cue { grid-template-columns: 1fr 1fr; }
-  .next-cue > :last-child { grid-column: 1 / -1; border-left: 0; border-top: 1px solid var(--line); }
 }
 
 @media (max-width: 680px) {
@@ -287,16 +286,33 @@ h2 { margin: 4px 0 0; font-size: 22px; }
   .btn { padding: 8px 9px; font-size: 12px; }
   .icon-btn { display: none; }
   main { width: min(100% - 20px, 1320px); padding-top: 16px; }
+  main:has(#liveView:not([hidden])) {
+    height: calc(100svh - 60px);
+    min-height: 0;
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
   .list-head { align-items: center; }
   .list-tools .text-btn { display: none; }
   .cue-row { grid-template-columns: 1fr; }
   .cue-lighting, .cue-spots { border-left: 0; border-top: 1px solid var(--line); }
   .spot-grid, .live-spots { grid-template-columns: 1fr; }
-  .live-topline { align-items: center; }
+  .live-view { display: flex; min-height: 0; flex-direction: column; gap: 8px; }
+  .live-topline { flex: 0 0 auto; align-items: center; margin: 0; }
   .shortcut { display: none; }
-  .next-cue { grid-template-columns: 1fr; }
-  .next-cue > div + div, .next-cue > :last-child { grid-column: auto; border-left: 0; border-top: 1px solid var(--line); }
-  .live-spot { min-height: auto; }
+  .current-cue { flex: 1 1 auto; min-height: 0; gap: 8px; padding: 11px; border-radius: 14px; }
+  .live-timing { font-size: clamp(22px, 6vw, 34px); }
+  .live-lighting { padding: 8px 10px; }
+  .live-lighting .label, .live-spot .label { margin-bottom: 3px; }
+  .live-lighting .value { font-size: 17px; }
+  .own-spot-hint { margin-bottom: 5px; font-size: 9px; }
+  .live-spots { grid-template-columns: repeat(auto-fit, minmax(105px, 1fr)); gap: 6px; }
+  .live-spot { min-height: 0; padding: 8px; border-radius: 9px; }
+  .live-spot .value { font-size: 17px; line-height: 1.3; }
+  .own-spot-badge { margin-bottom: 4px; padding: 2px 5px; font-size: 9px; }
+  .live-controls { flex: 0 0 auto; gap: 7px; margin-top: 0; }
+  .transport { padding: 11px 8px; font-size: 14px; }
+  .brightness-control { flex: 0 0 auto; gap: 3px; margin-top: 0; font-size: 11px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

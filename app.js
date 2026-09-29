@@ -30,7 +30,8 @@
     liveIndex: $('liveIndex'),
     liveTotal: $('liveTotal'),
     currentCue: $('currentCue'),
-    nextCue: $('nextCue'),
+    brightnessSlider: $('brightnessSlider'),
+    brightnessValue: $('brightnessValue'),
     dropOverlay: $('dropOverlay'),
     statusBar: $('statusBar'),
     statusText: $('statusText'),
@@ -43,6 +44,14 @@
   const CONTINUE_RE = /^(?:↓|⬇|〃|同|同上|継続|続き|つづき|keep|same)$/i;
   const OFF_RE = /^(?:消|消灯|off|なし|無し|×|x|-|—)$/i;
   const OWN_SPOT_STORAGE_KEY = 'spotlightCueViewer.ownSpot';
+  const BRIGHTNESS_STORAGE_KEY = 'spotlightCueViewer.maxBrightness';
+
+  // try {
+  //   const savedBrightness = Number(localStorage.getItem(BRIGHTNESS_STORAGE_KEY));
+  //   if (Number.isFinite(savedBrightness) && savedBrightness >= 20 && savedBrightness <= 100) {
+  //     els.brightnessSlider.value = String(savedBrightness);
+  //   }
+  // } catch {}
 
   try {
     state.ownSpot = localStorage.getItem(OWN_SPOT_STORAGE_KEY) || '';
@@ -295,18 +304,9 @@
     els.cueList.replaceChildren(fragment);
   }
 
-  function compactSpots(row) {
-    return state.spotIndices.map((col) => `
-      <div class="spot-cell">
-        <span class="label">${escapeHTML(state.headers[col])}</span>
-        <div class="value">${valueHTML(cueCell(row, col))}</div>
-      </div>`).join('');
-  }
-
   function renderLive() {
     if (!state.rows.length) return;
     const row = state.rows[state.current];
-    const next = state.rows[state.current + 1];
     els.liveIndex.textContent = String(state.current + 1);
     els.liveTotal.textContent = String(state.rows.length);
     els.currentCue.style.setProperty('--spot-count', Math.max(1, state.spotIndices.length));
@@ -335,15 +335,6 @@
         <span class="label own-spot-hint">スポットをタップして自分の担当を選択</span>
         <div class="live-spots">${spotsHTML || '<span class="empty-value">スポット列なし</span>'}</div>
       </div>`;
-
-    if (next) {
-      els.nextCue.innerHTML = `
-        <div><span class="label">タイミング</span><div class="value">${valueHTML(cueCell(next, state.timingIndex))}</div></div>
-        <div><span class="label">${escapeHTML(state.headers[state.lightingIndex] || '調光')}</span><div class="value">${valueHTML(cueCell(next, state.lightingIndex))}</div></div>
-        <div><div class="spot-grid" style="--spot-count:${Math.max(1, state.spotIndices.length)}">${compactSpots(next)}</div></div>`;
-    } else {
-      els.nextCue.innerHTML = '<div style="grid-column:1/-1"><span class="label">END</span><div class="value empty-value">これが最後のキューです</div></div>';
-    }
 
     els.prevBtn.disabled = state.current === 0;
     els.nextBtn.disabled = state.current === state.rows.length - 1;
@@ -378,6 +369,14 @@
     renderLive();
   }
 
+  function setBrightness(value) {
+    const brightness = Math.max(20, Math.min(100, Number(value)));
+    els.liveView.style.setProperty('--cue-brightness', String(brightness / 100));
+    // els.brightnessValue.value = `${brightness}%`;
+    // els.brightnessValue.textContent = `${brightness}%`;
+    // try { localStorage.setItem(BRIGHTNESS_STORAGE_KEY, String(brightness)); } catch {}
+  }
+
   function showStatus(message) {
     els.statusText.textContent = message;
     els.statusBar.hidden = false;
@@ -405,6 +404,7 @@
   els.prevBtn.addEventListener('click', () => step(-1));
   els.nextBtn.addEventListener('click', () => step(1));
   els.statusClose.addEventListener('click', hideStatus);
+  // els.brightnessSlider.addEventListener('input', (event) => setBrightness(event.target.value));
   els.currentCue.addEventListener('click', (event) => {
     const spot = event.target.closest('[data-spot]');
     if (!spot) return;
@@ -416,6 +416,8 @@
     } catch {}
     renderLive();
   });
+
+  setBrightness(100);
   els.fullscreenBtn.addEventListener('click', async () => {
     try {
       if (!document.fullscreenElement) await document.documentElement.requestFullscreen();

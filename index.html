@@ -64,15 +64,15 @@
 
       <article id="currentCue" class="current-cue"></article>
 
-      <div class="next-wrap">
-        <span class="eyebrow">NEXT</span>
-        <article id="nextCue" class="next-cue"></article>
-      </div>
-
       <div class="live-controls">
         <button id="prevBtn" class="transport" type="button">← 前へ</button>
         <button id="nextBtn" class="transport primary" type="button">次へ →</button>
       </div>
+
+      <!--<div class="brightness-control">
+        <label for="brightnessSlider">色の最大明るさ <output id="brightnessValue" for="brightnessSlider">100%</output></label>
+        <input id="brightnessSlider" type="range" min="20" max="100" step="5" value="100" aria-label="ライブ表示の色の最大明るさ" />
+      </div>-->
     </section>
   </main>
 
@@ -83,6 +83,6 @@
     </div>
   </template>
 
-  <script src="./app.js" defer></script>
+  <script src="./app.js" type="module" defer></script>
 </body>
 </html>
